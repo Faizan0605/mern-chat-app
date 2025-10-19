@@ -1,11 +1,14 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes")
+const {notFound, errorHandler} = require('./middleware/errorMiddleware')
 
-const { chats } = require("./data/data");
 
 dotenv.config();
-
+connectDB();
 const app = express();
+app.use(express.json());
 
 
 // Test route
@@ -13,20 +16,14 @@ app.get('/', (req, res) => {
   res.send("Server is running 🚀");
 });
 
-// All chats
-app.get('/api/chat', (req, res) => {
-  res.send(chats);
-});
 
-// Single chat
-app.get('/api/chat/:id', (req, res) => {
-  const singleChat = chats.find((c) => c._id === req.params.id);
-  if (!singleChat) {
-    return res.status(404).send({ message: "Chat not found" });
-  }
-  res.send(singleChat);
-});
+app.use("/api/user", userRoutes);
+
+app.use(notFound)
+app.use(errorHandler)
 
 // Start server
-const PORT = process.env.PORT || 5222;
-app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
+const PORT = process.env.PORT || 3000
+app.listen(PORT, ()=>{
+  console.log(`app is listning to port ${PORT}`)
+})
