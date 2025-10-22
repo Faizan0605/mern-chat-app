@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes")
-const {notFound, errorHandler} = require('./middleware/errorMiddleware')
+const chatRoutes = require("./routes/chatRoutes")
+const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 
 
 dotenv.config();
@@ -18,12 +19,14 @@ app.get('/', (req, res) => {
 
 
 app.use("/api/user", userRoutes);
+app.use("/api/chat", chatRoutes)
+
 
 app.use(notFound)
 app.use(errorHandler)
 
 // Start server
 const PORT = process.env.PORT || 3000
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
   console.log(`app is listning to port ${PORT}`)
 })
