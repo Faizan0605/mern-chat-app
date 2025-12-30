@@ -1,10 +1,11 @@
-const express = require("express");
+// const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();  // ✅ make sure .env variables are loaded
+require("dotenv").config();
 
-const app = express();
+// const app = express();
 
 const connectDB = async () => {
+
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI
       , {
@@ -14,7 +15,7 @@ const connectDB = async () => {
     console.log("✅ Connected to MongoDB successfully", conn.connection.host);
   } catch (error) {
     console.error("❌ MongoDB connection failed:", error.message);
-    process.exit(1); // stop the server if connection fails
+    process.exit(); // stop the server if connection fails
   }
 };
 

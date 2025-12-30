@@ -20,7 +20,7 @@ const accessChat = asyncHandler(async (req, res) => {
         .populate("users", "-password")
         .populate("latestMessage");
 
-    isChat = await User.populate(isChat, {
+    isChat = await User.populate(isChat, { //populating latest messages
         path: "latestMessage.sender",
         select: "name pic email",
     });
@@ -108,7 +108,8 @@ const renameGroup = asyncHandler(async (req, res) => {
         chatId,
         {
             chatName, // key and value are same
-        }, { new: true }
+        },
+        { new: true } // new make it return updated value
     )
         .populate("users", "-password")
         .populate("groupAdmin", "-password");
@@ -141,7 +142,6 @@ const addToGroup = asyncHandler(async (req, res) => {
         res.json(added);
     }
 });
-
 
 
 const removeFromGroup = asyncHandler(async (req, res) => {

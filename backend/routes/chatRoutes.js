@@ -1,14 +1,7 @@
 const express = require("express");
 const { protect } = require("../middleware/authMiddleware");
 const { accessChat, fetchChats, createdGroupChat, renameGroup, addToGroup, removeFromGroup } = require("../controllers/chatController");
-// const {
-//     // accessChat,
-//     // fetchChat,
-//     // createGroupChat,
-//     // renameGroup,
-//     // removeFromGroup,
-//     // addToGroup,
-// } = require("../controllers/chatController");
+
 
 const router = express.Router();
 
