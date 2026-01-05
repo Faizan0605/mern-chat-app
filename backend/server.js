@@ -29,6 +29,17 @@ app.use(errorHandler)
 
 // Start server
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`app is listning to port ${PORT}`)
 })
+
+// const io = require('socket.io')(server, {
+//   pingTimeout: 60000,
+//   cors: {
+//     origin: "http://localhost:3000",
+//   },
+// });
+
+// io.on("connection", (socket)=>{
+//   console.log("connected to socket.io");
+// });

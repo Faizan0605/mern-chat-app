@@ -70,7 +70,11 @@ const allUsers = asyncHandler(async (req, res) => {
             { email: { $regex: req.query.search, $options: "i" } },
         ]
     } : {};
-    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-    res.send(users);
+    const users = await User
+        .find(keyword)
+        .find({ _id: { $ne: req.user._id } })
+        .select("-password");
+
+    res.send(users);//remove password before sending
 })
 module.exports = { registerUser, authUser, allUsers }; 

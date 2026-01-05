@@ -1,38 +1,27 @@
-// import axios from 'axios';
-// import React, { useEffect, useState } from 'react'
-
-// const Chatpage = () => {
-//     const [chats, setChats] = useState([]);
-
-//     const fetchChats = async () => {
-//         const { data } = await axios.get("/api/chats");
-//         setChats(data);
-//     }
-
-//     useEffect(() => {
-//         fetchChats();
-//     }, []);
-
-//     return (
-//         <div>
-//             {chats.map((chat) => (
-//                 <div key={chat._id}>chat.Chatname</div>
-//             ))}
-//         </div>
-//     )
-// }
-
-// export default Chatpage
-
-import React from 'react'
-import { ChatState } from '../Context/ChatProvider'
+import React from 'react';
+import Navbar from '../components/authentication/Navbar';
+import Right from '../components/Chat/Right';
+import Left from '../components/Chat/Left';
 
 const Chatpage = () => {
-    const { user } = ChatState();
+    return (<div className='mx-5 h-[90vh]'>
+        <Navbar />
 
-    return (
-        <div>Chatpage</div>
-    )
-}
+        <div className="grid grid-cols-4 gap-5 h-screen">
 
-export default Chatpage
+            {/* Left Section (1/4) */}
+            <div className="col-span-1">
+                <Left />
+            </div>
+
+            {/* Right Section (3/4) */}
+            <div className="col-span-3">
+                <Right />
+            </div>
+
+        </div>
+    </div>
+    );
+};
+
+export default Chatpage;

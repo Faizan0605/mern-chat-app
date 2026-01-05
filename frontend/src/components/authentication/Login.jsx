@@ -1,119 +1,67 @@
-import React from 'react'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
-import { useState } from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from "react-router";
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClick = () => setShow(!show);
-
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [loading, setLoading] = useState(false);
-
-    const submitHandler = async () => {
-        setLoading(true);
-        if (!email || !password) {
-            toast('Please Fill all the Feilds', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            setLoading(false);
-            return;
-        }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
         try {
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                },
-            };
-
-            const { data } = await axios.post(
-                "/api/user/login",
-                { email, password },
-                config
-            );
-
-            toast('Login Successful', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
+            const res = await axios.post('/api/user/login', {
+                email,
+                password,
             });
-            localStorage.setItem("userInfo", JSON.stringify(data));
-            setLoading(false);
+
+            console.log('Login success:', res.data);
+            const token = res.data.token;
+
+            // ✅ Save token
+            localStorage.setItem('token', token);
+
             navigate("/chats");
+
         } catch (error) {
-            toast(error.response?.data?.message || 'Error Occured!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            setLoading(false);
+            console.error('Login failed:', error.response?.data || error.message);
         }
     };
 
     return (
-        <div className='justify-center items-center'>
-            <form>
-                <div>
-                    <label>Email Address</label>
+        <div className=" flex items-center justify-center bg-gray-100">
+            <div className="w-80 bg-white p-6 rounded-xl shadow-lg">
+                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+                    Login
+                </h2>
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <input
                         type="email"
-                        placeholder="Enter Your Email Address"
+                        placeholder="Email"
+                        value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </div>
 
-                <div>
-                    <label>Password</label>
                     <input
-                        type={show ? "text" : "password"}
-                        placeholder="Enter Password"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <button type="button" onClick={handleClick}>
-                        {show ? "Hide" : "Show"}
+
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                    >
+                        Login
                     </button>
-                </div>
-
-                <button type="button" onClick={submitHandler} disabled={loading}>
-                    {loading ? "Loading..." : "Login"}
-                </button>
-                <br></br>
-                <button
-                    type="button"
-                    onClick={() => {
-                        setEmail("guest@example.com");
-                        setPassword("123456");
-
-                    }}
-                >
-                    Get Guest User Credentials
-                </button>
-            </form>
-            <ToastContainer />
+                </form>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

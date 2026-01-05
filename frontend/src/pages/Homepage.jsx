@@ -1,29 +1,45 @@
-import Login from '../components/authentication/Login';
-import Signup from '../components/authentication/Signup';
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useState } from "react";
+import Login from "../components/authentication/Login";
+import Register from "../components/authentication/Register";
+import Navbar from "../components/authentication/Navbar";
 
 const Homepage = () => {
+    const [isLogin, setIsLogin] = useState(true);
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("userInfo"));
-        if (user) { navigate("/chats") }
-    }, [navigate])
+    return (<>
+        <Navbar />
+        <div className="h-screen gap-8 flex flex-col items-center justify-center bg-gray-100">
 
-    const [page, setPage] = useState("login");
-    return (
-        <div>
-            <div>
-                <span onClick={() => setPage("login")}>Login</span>{" "}
-                <span onClick={() => setPage("signup")}>Signup</span>
+
+
+            {/* Forms */}
+            {isLogin ? <Login /> : <Register />}
+
+            {/* Toggle Buttons */}
+            <div className="flex gap-4">
+                <button
+                    onClick={() => setIsLogin(true)}
+                    className={`px-6 py-2 rounded-lg font-semibold transition ${isLogin
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-700 border"
+                        }`}
+                >
+                    Login
+                </button>
+
+                <button
+                    onClick={() => setIsLogin(false)}
+                    className={`px-6 py-2 rounded-lg font-semibold transition ${!isLogin
+                        ? "bg-green-600 text-white"
+                        : "bg-white text-gray-700 border"
+                        }`}
+                >
+                    Register
+                </button>
             </div>
-            <br></br>
-            <br></br>
-            {page === "login" ? <Login /> : <Signup />}
         </div>
+    </>
+    );
+};
 
-    )
-}
-
-export default Homepage
+export default Homepage;
