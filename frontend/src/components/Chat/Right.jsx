@@ -1,10 +1,14 @@
-import { use } from 'react';
+import { use, useEffect } from 'react';
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import useCurrChat from '../../contexts/CurrChat';
 
 const Right = () => {
     const [message, setMessage] = useState('');
     const [eye, setEye] = useState(false);
+    const { currChat } = useCurrChat();
+
+
 
 
     const handleSend = () => {
@@ -29,6 +33,9 @@ const Right = () => {
 
             {/* message area */}
             <div className='bg-white rounded h-[70vh]'>
+                {currChat?.users?.map((user) => (
+                    <h1 key={user._id}>{user.name}</h1>
+                ))}
 
             </div>
 

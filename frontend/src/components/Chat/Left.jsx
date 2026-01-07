@@ -1,12 +1,16 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { IoIosSearch } from "react-icons/io";
+import useCurrChat from '../../contexts/CurrChat';
 
 const Left = () => {
 
     const [contacts, setContacts] = useState([]);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
+    const { setCurrChat } = useCurrChat();
+
+    const token = localStorage.getItem('token');
 
     const handleSearch = async () => {
         try {
@@ -19,7 +23,7 @@ const Left = () => {
                 },
             });
 
-            console.log(usersData.data);
+            // console.log(usersData.data);
             setUsers(usersData.data);
 
         } catch (error) {
@@ -27,9 +31,26 @@ const Left = () => {
         }
     };
 
+    const accessChat = async (id) => {
+        try {
+            const response = await axios.post('/api/chat', { "userId": id }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+
+            })
+            console.log(response.data);
+            setCurrChat(response.data);
 
 
-    const token = localStorage.getItem('token');
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+
     useEffect(() => {
         const fetchChats = async () => {
             try {
@@ -39,8 +60,8 @@ const Left = () => {
                     },
                 });
 
-                console.log(response.data);
-                setContacts(response.data); // 👈 store chats
+                // console.log(response.data);
+                setContacts(response.data); //  store chats
             } catch (error) {
                 console.error(error);
             }
@@ -56,6 +77,8 @@ const Left = () => {
             <div><button className='bg-blue-100 p-2 rounded hover:bg-blue-200 transition'>Add Group Chat +</button></div>
         </div>
 
+
+        {/*search*/}
         <div className='flex justify-between mb-2'>
             <input className='px-3 py-1 bg-white rounded' placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)}></input>
             <button className='bg-blue-100 hover:bg-blue-200 rounded-full p-2' onClick={(handleSearch)}><IoIosSearch /></button>
@@ -64,6 +87,7 @@ const Left = () => {
         {!users.length == 0 ? <div className='bg-white rounded p-3 mb-6'>
             {users.map((user) => (
                 <div
+                    onClick={() => accessChat(user._id)}
                     key={user._id}
                     className="p-1 bg-white rounded cursor-pointer hover:bg-blue-100 transition"
                 >
@@ -71,7 +95,8 @@ const Left = () => {
                 </div>
 
             ))}
-        </div> : <></>}
+        </div> : <></>
+        }
 
 
         {/* contacts */}
@@ -88,7 +113,7 @@ const Left = () => {
                 </div>
             ))}
         </div>
-    </div>
+    </div >
     )
 }
 
