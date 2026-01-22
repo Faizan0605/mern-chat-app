@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 
 const accessChat = asyncHandler(async (req, res) => {
     const { userId } = req.body;
-
+    // console.log(req.user)
     if (!userId) {
         console.log("UserId param not send with request");
         return res.sendStatus(400);
@@ -24,15 +24,17 @@ const accessChat = asyncHandler(async (req, res) => {
         path: "latestMessage.sender",
         select: "name pic email",
     });
-
+    // console.log(isChat) ///////////
     if (isChat.length > 0) {
         res.send(isChat[0]);
     } else {
         var chatData = {
             chatName: "sender",
             isGroupChat: false,
-            users: [req.user._id, userId],
+            users: [req.user._id, userId], //req.user._id = logined user
         };
+        // /console.log(req);///////////
+        // console.log(userId)
 
         try {
             const createdChat = await Chat.create(chatData);
@@ -46,6 +48,7 @@ const accessChat = asyncHandler(async (req, res) => {
         }
     }
 });
+
 
 const fetchChats = asyncHandler(async (req, res) => {
     try {
@@ -78,7 +81,6 @@ const createdGroupChat = asyncHandler(async (req, res) => {
             .status(400)
             .send("More than 2 users are required to form a group chat");
     }
-
     users.push(req.user);
 
     try {

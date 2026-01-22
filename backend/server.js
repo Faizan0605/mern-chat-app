@@ -7,6 +7,7 @@ const messageRoutes = require("./routes/messageRoutes")
 const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 
 
+
 dotenv.config();
 connectDB();
 const app = express();
@@ -33,13 +34,26 @@ const server = app.listen(PORT, () => {
   console.log(`app is listning to port ${PORT}`)
 })
 
-// const io = require('socket.io')(server, {
-//   pingTimeout: 60000,
-//   cors: {
-//     origin: "http://localhost:3000",
-//   },
-// });
+const io = require('socket.io')(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:5173",
+  },
+});
 
-// io.on("connection", (socket)=>{
-//   console.log("connected to socket.io");
-// });
+io.on("connection", (socket) => {
+  console.log("connected to socket.io");
+
+  socket.on("setup", (loggedUserId) => {
+    socket.join(loggedUserId);
+    // console.log(loggedUserId);
+    socket.emit("connected");
+  })
+
+  socket.on('join chat', (room) => {
+    socket.join(room);
+    console.log("User Joined Room" + room) //room = currChatID
+  })
+});
+
+

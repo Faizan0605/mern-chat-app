@@ -17,9 +17,11 @@ const Login = () => {
 
             console.log('Login success:', res.data);
             const token = res.data.token;
+            const userId = res.data._id;
 
             // ✅ Save token
             localStorage.setItem('token', token);
+            localStorage.setItem('userId', userId);
 
             navigate("/chats");
 

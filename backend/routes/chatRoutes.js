@@ -5,10 +5,10 @@ const { accessChat, fetchChats, createdGroupChat, renameGroup, addToGroup, remov
 
 const router = express.Router();
 
-router.route("/").post(protect, accessChat); //frontend
+router.route("/").post(protect, accessChat); //done but only 1v1 not group
 router.route("/").get(protect, fetchChats); //done
-router.route("/group").post(protect, createdGroupChat); //front 
-router.route("/rename").put(protect, renameGroup); //front
+router.route("/group").post(protect, createdGroupChat); //done
+router.route("/rename").put(protect, renameGroup); //done
 router.route("/groupremove").put(protect, removeFromGroup); //front
 router.route("/groupadd").put(protect, addToGroup); //front
 
