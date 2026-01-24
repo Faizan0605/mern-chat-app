@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import Lottie from 'react-lottie'
 import animationData from '../../animations/typing.json'
 
-const ENDPOINT = "https://mern-chat-app-7inc.onrender.com";
+// const ENDPOINT = "http://localhost:3000";
 var socket, selectedChatCompare;
 
 const Right = () => {
@@ -38,7 +38,8 @@ const Right = () => {
 
 
     useEffect(() => {
-        socket = io(ENDPOINT);
+        socket = io(); // no URL
+        // socket = io(ENDPOINT); //for localmachine
         socket.emit("setup", loggedUserId);
         socket.on('connected', () => setSocketConnected(true));
         socket.on('typing', () => setIsTyping(true))
